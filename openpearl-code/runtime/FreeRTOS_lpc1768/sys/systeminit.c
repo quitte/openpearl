@@ -14,7 +14,7 @@ static void realinit_ClockRTC();
 static void realinit_ClockMonotonicRealtime();
 
 void software_init_hook(){
-	systeminit(CpuClock);
+	systeminit(ClockRTC);
 }
 
 void systeminit(enum systeminit sysinit){
