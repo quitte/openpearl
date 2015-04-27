@@ -311,7 +311,6 @@ Default_Handler:
         def_irq_handler  SSP0_IRQHandler
         def_irq_handler  SSP1_IRQHandler
         def_irq_handler  PLL0_IRQHandler
-        def_irq_handler  RTC_IRQHandler
         def_irq_handler  EINT0_IRQHandler
         def_irq_handler  EINT1_IRQHandler
         def_irq_handler  EINT2_IRQHandler
