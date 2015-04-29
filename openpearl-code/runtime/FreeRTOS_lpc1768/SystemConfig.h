@@ -27,7 +27,6 @@
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 #include <stdint.h>
-#include "systeminit.h"
 
 #ifndef SYSTEMCONFIG_H_
 #define SYSTEMCONFIG_H_

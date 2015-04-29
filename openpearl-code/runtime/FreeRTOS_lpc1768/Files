@@ -6,6 +6,7 @@ CSRC += $(NXP)/iocon_17xx_40xx.c
 CSRC += ./sys/systeminit.c
 CSRC += ./sys/time.c
 CSRC += ./sys/systime.c
+CSRC += ./sys/timer.c
 CSRC += ./retarget.c
 CSRC += ./hy32a.c
 CINCS += $(NXPINC) 

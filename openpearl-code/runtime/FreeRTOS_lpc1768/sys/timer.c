@@ -1,4 +1,10 @@
 /*
+ * timer.c
+ *
+ *  Created on: 28.04.2015
+ *      Author: quitte
+ */
+/*
  [The "BSD license"]
  Copyright (c) 2015 Jonas Meyer
  All rights reserved.
@@ -26,24 +32,61 @@
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
+#include <time.h>
+#include <sys/errno.h>
+#include <stdio.h>
 
-#ifndef SYS_SYSTEMINIT_H_
-#define SYS_SYSTEMINIT_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+typedef unsigned int timerindex_t;
+typedef unsigned char short_timer_t;//add macros to pick a fitting type.
+//typedef struct{
+//	TaskHandle_t				xTask;
+//	void						*pvParameter;
+//}FreeRTOS_TaskHook_t;
 
-enum systeminit{
-	CpuClock,
-	ClockRTC,
-	ClockMonotonicRealtime
+struct tableentry{
+	short_timer_t				index;
+	short_timer_t				next;
+	short_timer_t				prev;
+	struct sigevent *__restrict evp;	//actually a pointer to the FreeRTOS_TaskHook_T.
+	struct itimerspec			value;
+	struct itimerspec			*ovalue; //"return value that indicates what the timer didn't do"
 };
 
-void systeminit(enum systeminit);
+static timer_t firstfree=0;
+static timer_t first=0;
 
-#ifdef __cplusplus
+static struct tableentry table[8];//endof range is special and marks the end of things
+
+static timer_t newtableentry(struct sigevent *__restrict evp, struct itimerspec value, struct itimerspec *ovalue){
+	timer_t myindex;
+	while(0){
+
+	}
+	return myindex;
 }
-#endif
 
-#endif /* SYS_SYSTEMINIT_H_ */
+static void deletetableentry(timer_t timerid){
+
+}
+
+extern int timer_create(clockid_t clock_id, struct sigevent *__restrict evp, timer_t *__restrict timerid){
+	return ENOTSUP;
+}
+
+int timer_getoverrun(timer_t timerid){
+	return ENOTSUP;
+}
+
+int timer_gettime(timer_t timerid, struct itimerspec *value){
+	return ENOTSUP;
+}
+
+int timer_settime(timer_t timerid, int flags,
+       const struct itimerspec *value,
+       struct itimerspec *ovalue){
+	if(flags!=TIMER_ABSTIME)
+		;//value-=clock_gettime
+
+	return ENOTSUP;
+}

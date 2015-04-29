@@ -36,12 +36,10 @@
 static volatile unsigned int unixtime;
 static volatile unsigned int tickspersecond;
 
-void TIMER0_IRQHandler() __attribute__ ((used));
 void RTC_IRQHandler() __attribute__ ((used));
 
 //Todo: Calculate the maximum change in the next second and make a second short by that amount.
 //this ensures perfect monotony and gives a decent value for the precision
-
 static unsigned int ticks2nsec(unsigned int nsecs){
 	return (unsigned int)(
 			((uint64_t)nsecs*1000000000)
@@ -56,6 +54,7 @@ static unsigned int nsec2ticks(unsigned int ticks){
 
 //static?
 int systime_clock_gettime_cb(clockid_t clock_id, struct timespec *tp){
+	//Todo: the nsec value must not exceed 1s
 	tp->tv_nsec=ticks2nsec(LPC_TIMER0->TC);
 	tp->tv_sec=unixtime;
 	return 0;
@@ -63,12 +62,6 @@ int systime_clock_gettime_cb(clockid_t clock_id, struct timespec *tp){
 
 static inline void calibraterRTtimerFromRTC_IRQHandler(volatile int delta){
 	static unsigned int goodcounter;
-	unsigned int tickstore = tickspersecond;
-
-	printf("calibration: %i.%i Mhz\n",tickspersecond/1000000,tickspersecond-((tickspersecond/1000000)*1000000));
-	printf("error: %i ticks, this second\n",delta);
-
-
 	if(delta==0){
 		goodcounter++;
 		if(goodcounter>1800){//1h
@@ -85,6 +78,7 @@ static inline void calibraterRTtimerFromRTC_IRQHandler(volatile int delta){
 	else if(delta==-1)
 		tickspersecond--;
 	else{
+		unsigned int tickstore = tickspersecond;
 		tickspersecond=tickspersecond+(delta/2);
 		if(tickstore==tickspersecond)
 				tickspersecond++;
@@ -108,7 +102,7 @@ static void InitTimerFromRTC_IRQHandler(){
 	clock_gettime_cb=&systime_clock_gettime_cb;
 }
 
-__attribute__ ((used)) void RTC_IRQHandler() {
+void RTC_IRQHandler(){
 	static enum{
 		tick,
 		tock,
@@ -134,7 +128,7 @@ __attribute__ ((used)) void RTC_IRQHandler() {
 		break;
 	case noinit:
 		//wait to init at beginning of second
-		//load worsened, saved values from battery backed ram.
+		//Todo: load worsened, saved values from battery backed ram.
 		tickstate = init;
 		break;
 	}

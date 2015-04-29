@@ -31,7 +31,6 @@
 #include <sys/time.h>
 #include <sys/errno.h>
 #include "chip.h"
-#include "systeminit.h"
 
 static int rtc_clock_gettime_cb(clockid_t clock_id, struct timespec *tp);
 int (*clock_gettime_cb)(clockid_t clock_id, struct timespec *tp) = &rtc_clock_gettime_cb;
@@ -83,6 +82,7 @@ static void rtc_setunixtime(time_t time){
 	Chip_RTC_SetFullTime(LPC_RTC,&rtc_time);
 }
 
+//used by systeminit.c
 void systeminit_rtc_settime(unsigned int fallbackstamp){
 	RTC_TIME_T time;
 	Chip_RTC_GetFullTime(LPC_RTC, &time);

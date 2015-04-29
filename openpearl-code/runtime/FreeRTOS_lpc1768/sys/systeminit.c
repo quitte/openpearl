@@ -28,8 +28,15 @@
 */
 
 #include "SystemConfig.h"
-#include "systeminit.h"
 #include "chip.h"
+
+enum systeminit{
+	CpuClock,
+	ClockRTC,
+	ClockMonotonicRealtime
+};
+
+void systeminit(enum systeminit);
 
 static void realinit_CpuClock();
 static void realinit_ClockRTC();
@@ -103,6 +110,7 @@ static void realinit_CpuClock() {
 	SystemCoreClockUpdate();
 }
 
+//provided by time.c
 extern void systeminit_rtc_settime(unsigned int fallbackstamp);
 static void realinit_ClockRTC(){
 	Chip_RTC_Init(LPC_RTC);

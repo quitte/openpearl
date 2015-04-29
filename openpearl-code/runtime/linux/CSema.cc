@@ -34,7 +34,6 @@
 
 \author R. Mueller
 */
-#include <pthread.h>
 #include <string.h>  // strerror
 #include <semaphore.h>
 
